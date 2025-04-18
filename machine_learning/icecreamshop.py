@@ -4,8 +4,8 @@ class Icecream:
         self.__name: str = name
         self.__flavor: str = flavor
         self.__price_per_scoop: float = price_per_scoop
-
-    @property
+##
+    @property 
     def name(self):
         return self.__name
 
@@ -20,14 +20,11 @@ class Icecream:
 
 class Cone:
     def __init__(self, scoop_list: list[Icecream] = None):
-        if scoop_list is None:
-            self.__scoop_list = []
-        self.__scoops: list[Icecream] = scoop_list
+        self.__scoop_list: list[Icecream] = scoop_list if scoop_list is not None else []
 
     @property
     def scoops(self):
         return self.__scoop_list
-
 
     @scoops.setter
     def scoops(self, scoop_list: list[Icecream]):
@@ -40,7 +37,7 @@ class Cone:
         if len(self.__scoop_list) < 3:
             self.__scoop_list.append(icecream)
         else:
-            print("Zu viele Kugeln ausgewählt!!")
+            print("Zu viele Kugeln ausgewählt!")
 
 
 list_of_flavors = [
@@ -48,31 +45,39 @@ list_of_flavors = [
     Icecream("Vanilla Boom", "Vanilla", 4.99)
 ]
 
-print("welcome to our ice cream shop")
+print("Willkommen in unserem Eisladen!")
 
-print("1.Make an order")
-print("2. receive invoice")
-print("3.pay")
-print("4.exit shop")
+print("1. Bestellung aufgeben")
+print("2. Rechnung erhalten")
+print("3. Bezahlen")
+print("4. Laden verlassen")
 
-user_choice = int(input("what would you like to do?"))
+user_choice = int(input("Was möchten Sie tun?"))
 
 if user_choice == 1:
-    print("these are our flavors")
+    print("Das sind unsere Sorten:")
     for icecream in list_of_flavors:
-        print(f"{icecream.name},{icecream.flavor},{icecream.price_per_scoop}")
+        print(f"{icecream.name}, {icecream.flavor}, {icecream.price_per_scoop}€")
 
     new_order = Cone()
-
     more_ice = True
+
     while more_ice:
-        user_flavor1 = input("what ice cream flavor would you like? or do you have enough flavors type yes?")
+        user_flavor = input("Welche Eissorte möchten Sie? Oder geben Sie 'ja' ein, wenn Sie genug haben: ")
+        
+        if user_flavor.lower() == "ja":
+            more_ice = False
+            continue
+
+        found = False
         for flavor in list_of_flavors:
-            if user_flavor1 == Icecream.flavor:
-                new_order.add_icecream(icecream)
-                for scoops in new_order.scoop_list:
-                    print(f"{scoops.name},{scoops.flavor},{scoops.price_per_scoop}")
-            if user_flavor1 == "yes":
-                more_ice = False
-            else:
-                print("we do not have this flavor.")
+            if user_flavor.lower() == flavor.flavor.lower():
+                new_order.add_icecream(flavor)
+                found = True
+                print("Ihre aktuelle Bestellung:")
+                for scoop in new_order.scoops:
+                    print(f"- {scoop.name}, {scoop.flavor}, {scoop.price_per_scoop}€")
+                break
+
+        if not found:
+            print("Diese Sorte haben wir leider nicht.")
